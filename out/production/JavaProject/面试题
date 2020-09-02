@@ -1,0 +1,62 @@
+前端：
+    1.ECMAScript和JavaScript有什么关系？
+        ECMAScript:所有脚本语言的标准
+        JavaScript:满足ECMAScript标准的脚本语言
+
+    2.js对象和jq转换
+        js===>jq：$(js对象)
+        jq===>js：jq对象[index]---推荐使用  jq对象.get(index)
+
+    3.jq的ready和js的onload有什么区别
+        load事件 当整个页面加载(视频，图片，音频等)完成之后执行
+        jq的ready===》》》document对象的方法DOMContentLoaded 当整个页面(标签)加载完成之后
+
+
+1.i>i+1  如何让这个式子成立
+    假设i是int类型，那么当i=2^32-1时，i+1数据溢出变成负数，就达成了条件i+1 < i，其他类型同理
+
+2. 以下程序有没有错误 为什么？
+    byte num1 = 20 + 5;
+    byte num2 = 30;
+    byte result = num1 + num2;
+    常量优化机制:直接写常量，不会到编译的那一步结果就已经确定
+    byte num = 20 + 5 赋值的常量，自动判断常量有没有超出左侧的范围，没有超出范围自动补上强转
+
+3.域负数取余数 符号取走边
+  5 % 3 =  2
+ -5 % 3 = -2
+  5 % -3 = 2
+ -5 % -3 = -2
+
+4.int a=1; a=a++; 结果是什么？ 为什么
+  结果为1 先用后加
+
+5. = == ===区别
+   = 赋值
+   == 比较两个数是否相等
+   === js里面有 先比较类型后比较值
+
+6.以下代码结果是？
+    int x = 1;
+    for (System.out.println("A");x<=3; System.out.println("c")){
+            System.out.print("B");
+            x++;
+    }
+    【ABCBCBC】
+
+7.以下代码a的结果是
+    int a= 1;
+    for (int i = 0; i < 100; i++) {
+        a=a++;
+    }
+    【1】
+
+8.double a = 1.0/0 结果是什么？
+  Infinity：无穷大
+  0会向上转型变成无穷小，任何一个数除以无穷小都会变成无穷大(微积分)
+
+9.Set集合去重原理：
+    往HashSet添加元素的时候，HashSet会先调用元素的hashCode方法得到元素的哈希值
+    如果hash值不相同，说明是一个新元素，直接存储在这个位置上；
+    如果hash值相同，然后判断equals,返回true，说明元素已经存在，不存,返回false,说明不是同一个元素，存储。
+    相同哈希值的元素就这样存储在同一个哈希桶中，用链表连接，如果超过链表的阈值（8），则转换成红黑树存储数据

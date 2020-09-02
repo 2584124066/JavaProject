@@ -1,0 +1,90 @@
+Junit
+    1. 是一个Java语言的单元测试框架
+    2. 常用注解 (写在方法上)
+        @Before：在每个测试方法之前都会运行一次
+        @After：在每个测试方法运行以后运行的方法
+        @BeforeClass：在所有的测试方法运行之前，运行一次，而且必须用在静态方法上面。
+        @AfterClass：所有的测试方法运行以后，运行一次，必须用在静态方法上面。
+反射
+    1. 反射是一种机制，利用该机制可以在程序运行过程中对类进行解剖并操作类中的方法，属性，构造方法等成员。
+    2. 使用反射机制解剖类的前提  必须先要获取到该类的字节码文件对象，即Class类型对象。
+            1、Java中使用Class类表示某个class文件.
+            2、任何一个class文件都是Class这个类的一个实例对象
+    3. 获取Class对象的三种方式
+        1、类名.class获取
+        2、Object类的成员方法getClass()获取
+        3、Class.forName("全限定类名")方法获取
+    4. 获取Class对象的信息
+        1、getSimpleName() ： 获得简单类名，只是类名，没有包
+        2、getName() ： 获取完整类名，包含包名+类名
+        3、newInstance() ：创建此 Class 对象所表示的类的一个新实例。要求：类必须有public的无参数构造方法
+    5.  Constructor 构造方法类，类中的每一个构造方法都是Constructor的对象，通过Constructor对象可以实例化对象。
+        1、getConstructor(Class... parameterTypes)   只能获得单个public修饰的构造方法
+        2、getDeclaredConstructor(Class... parameterTypes)   获得单个任意修饰的构造方法
+        3、getConstructors()  获取所有的public修饰的构造方法
+        4、getDeclaredConstructors() 获取所有构造方法
+        5、newInstance(Object... initargs) 根据指定参数创建对象。
+        6、setAccessible(true) 暴力反射，除public修饰的构造方法外，其他构造方法反射都需要暴力反射
+    6.  获取Class对象的Method(成员方法)信息
+        1.Method是方法类，类中的每一个方法都是Method的对象，通过Method对象可以调用方法。
+        2、getMethod("方法名", 方法的参数类型... 类型)   根据方法名和参数类型获得一个方法对象，只能是获取public修饰的
+        3、getDeclaredMethod("方法名", 方法的参数类型... 类型) 根据方法名和参数类型获得一个任意修饰的   方法对象
+        4、getMethods() 获取所有的public修饰的成员方法，包括父类中。
+        5、getDeclaredMethods() 获取当前类中所有的方法，包含私有的，不包括父类中。
+        6、invoke(Object obj, Object... args) 调用对象obj的该成员方法  如果obj=null，则表示该方法是静态方法
+        7、 setAccessible(boolean flag) 暴力反射，设置为可以直接调用私有修饰的成员方法
+    7.  获取Class对象的Field(属性)信息
+        1.Field是属性类，类中的每一个属性(成员变量)都是Field的对象，通过Field对象可以给对应的成员变量赋值和取值。
+        2、getDeclaredField(String name) 根据属性名获得任意修饰的属性对象
+        3、getField(String name) 根据属性名获得属性对象，只能获取public修饰的
+        4、getFields() 获取所有的public修饰的属性对象，返回数组。
+        5、getDeclaredFields() 获取所有的属性对象，包括private修饰的，返回数组。
+        6、getType(); 获取属性的类型，返回Class对象。
+        7.setXxx方法都是给对象obj的属性设置使用，针对不同的类型选取不同的方法。
+          getXxx方法是获取对象obj对应的属性值的，针对不同的类型选取不同的方法。
+注解
+    1. 注解的作用就是给程序带入参数。
+    2. 常见注解
+         @author：用来标识作者名，eclipse开发工具默认的是系统用户名。
+         @version：用于标识对象的版本号，适用范围：文件、类、方法。
+         @Override ：用来修饰方法声明，告诉编译器该方法是重写父类中的方法，如果父类不存在该方法，则编译失败。
+    3. 自定义注解
+        1. 注解的属性
+            1、属性的作用
+                可以让用户在使用注解时传递参数，让注解的功能更加强大。
+            2、属性的格式
+                格式1：数据类型 属性名();
+                格式2：数据类型 属性名() default 默认值;
+            3、属性适用的数据类型
+                八种基本数据类型（int,float,boolean,byte,double,char,long,short)
+                String类型，Class类型，枚举类型，注解类型
+                以上所有类型的一维数组
+        2. 使用注解
+            1、如果属性有默认值，则使用注解的时候，这个属性可以不用赋值。
+            2、如果属性没有默认值，那么在使用注解时一定要给属性赋值。
+        3. 特殊属性value
+            1. 当注解中只有一个属性且名称是value，在使用注解时给value属性赋值可以直接给属性值，无论value是单值元素还是数组类型。
+            2. 如果注解中除了value属性还有其他属性，且至少有一个属性没有默认值，则在使用注解给属性赋值时，value属性名不能省略。
+    4. 元注解
+        1. 元注解的概述
+            Java API提供的注解
+            专门用来定义注解的注解。
+            任何Java官方提供的非元注解的定义中都使用到了元注解。
+        2. 常用元注解
+             @Target     作用：指明此注解用在哪个位置，如果不写默认是任何地方都可以使用。可选的参数值在枚举类ElemenetType中
+             @Retention  作用：定义该注解的生命周期(有效范围)。   可选的参数值在枚举类型RetentionPolicy中
+    5. 注解解析  通过Java技术获取注解数据的过程则称为注解解析。
+        1. 与注解解析相关的接口
+            Anontation：所有注解类型的公共接口，类似所有类的父类是Object。s
+            AnnotatedElement：定义了与注解解析相关的方法，常用方法以下四个：
+                1、boolean isAnnotationPresent(Class annotationClass); 判断当前对象是否有指定的注 解，有则返回true，否则返回false。
+                2、T getAnnotation(Class<T> annotationClass); 获得当前对象上指定的注解对象。
+                3、Annotation[] getAnnotations(); 获得当前对象及其从父类上继承的所有的注解对象。
+                4、Annotation[] getDeclaredAnnotations();获得当前对象上所有的注解对象，不包括父类的。
+        2. 获取注解数据
+            1、注解作用在方法上，就通过方法(Method)对象得到它的注解
+            2、注解作用在类上，就通过Class对象得到它的注解
+
+
+
+

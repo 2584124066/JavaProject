@@ -1,0 +1,129 @@
+
+//当前集合的最大容量值
+private static final int MAX_ARRAY_SIZE = Integer.MAX_VALUE - 8;
+
+//集合的初始容量  10
+private static final int DEFAULT_CAPACITY = 10;
+
+//集合的默认长度  0
+private int size;
+
+//使用无参构造创建集合时，会把这个数组赋值给elementData  并且返回一个容量为10的集合
+private static final Object[] DEFAULTCAPACITY_EMPTY_ELEMENTDATA = {};
+
+//集合中元素真正存放的地方 是一个数组
+transient Object[] elementData; // non-private to simplify nested class access
+
+//无参构造方法
+public ArrayList() {
+    this.elementData = DEFAULTCAPACITY_EMPTY_ELEMENTDATA;
+}
+
+public boolean add(E e) {
+	//检查容器的容量是否足够，不足则当前size+1
+	ensureCapacityInternal(size + 1);  // Increments modCount!!
+	//往数组中添加元素
+	elementData[size++] = e;
+	return true;
+}
+//检查容量
+private void ensureCapacityInternal(int minCapacity) {
+	ensureExplicitCapacity(calculateCapacity(elementData, minCapacity));
+}
+
+private static int calculateCapacity(Object[] elementData, int minCapacity) {
+	//判断elementData是否被初始化
+	if (elementData == DEFAULTCAPACITY_EMPTY_ELEMENTDATA) {
+		return Math.max(DEFAULT_CAPACITY, minCapacity);
+	}
+	return minCapacity;
+}
+
+private void ensureExplicitCapacity(int minCapacity) {
+	//修改次数
+	modCount++;
+
+	// 最小容量10-数组的长度0
+	if (minCapacity - elementData.length > 0)
+		grow(minCapacity);//扩容
+}
+//扩容
+private void grow(int minCapacity) {
+	// 获取当前数组的容量  0
+	int oldCapacity = elementData.length;
+	// 扩容。新的容量=数组的长度+数组的长度的1.5倍
+	int newCapacity = oldCapacity + (oldCapacity >> 1);
+	// 新的容量-最小容量<0
+	if (newCapacity - minCapacity < 0)
+		//最小容量赋值给新的容量  第一次扩容
+		newCapacity = minCapacity;
+	//新的容量-最大容量>0
+	if (newCapacity - MAX_ARRAY_SIZE > 0)
+		//进行最大扩容
+		newCapacity = hugeCapacity(minCapacity);
+	// 扩容后将数组复制一份  copyOf(数组,数组的新长度)
+	elementData = Arrays.copyOf(elementData, newCapacity);
+}
+//最大扩容
+private static int hugeCapacity(int minCapacity) {
+	if (minCapacity < 0) // overflow
+		throw new OutOfMemoryError();
+	//最小容量>最大容量  返回int类型的最大值  否则返回MAX_ARRAY_SIZE
+	return (minCapacity > MAX_ARRAY_SIZE) ?
+		Integer.MAX_VALUE :
+		MAX_ARRAY_SIZE;
+}
+
+public E get(int index) {
+	//检查索引是否越界
+	rangeCheck(index);
+
+	return elementData(index);
+}
+
+//通过索引去数组中的元素
+E elementData(int index) {
+	return (E) elementData[index];
+}
+
+private void rangeCheck(int index) {
+	//当索引大于等于长度时 报错
+	if (index >= size)
+		throw new IndexOutOfBoundsException(outOfBoundsMsg(index));
+}
+
+public E remove(int index) {
+	//检查索引是否越界
+	rangeCheck(index);
+	//修改的次数
+	modCount++;
+	//返回指定元素
+	E oldValue = elementData(index);
+	
+	//计算移动的位数
+	int numMoved = size - index - 1;
+	//判断需要移动元素吗
+	if (numMoved > 0)
+		//复制数组  arraycopy(原数组,从哪里开始复制,目标数组,从哪里开始复制,复制的个数)
+		System.arraycopy(elementData, index+1, elementData, index,
+						 numMoved);
+	//让指定元素的后一个元素为空
+	elementData[--size] = null; // clear to let GC do its work
+
+	//返回指定元素
+	return oldValue;
+}
+
+public int size() {
+	return size;
+}
+
+public E set(int index, E element) {
+	//检查索引是否越界
+	rangeCheck(index);
+	//根据索引获取元素
+	E oldValue = elementData(index);
+	elementData[index] = element;
+	//返回被修改的元素
+	return oldValue;
+}

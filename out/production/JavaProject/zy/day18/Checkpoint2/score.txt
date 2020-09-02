@@ -1,0 +1,4 @@
+#Fri Aug 28 17:48:31 CST 2020
+lisi=100
+zhangsan=100
+wangwu=85
