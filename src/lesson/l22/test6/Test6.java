@@ -34,5 +34,12 @@ public class Test6 {
     public void method4() {
         System.out.println(AdminEnum.MA_YUN.getId());
         System.out.println(AdminEnum.MA_YUN.getAccount());
+
+        AdminEnum[] values = AdminEnum.values();
+        for (AdminEnum value : values) {
+            System.out.println(value);
+        }
+
+        System.out.println(AdminEnum.valueOf("MA_YUN"));
     }
 }

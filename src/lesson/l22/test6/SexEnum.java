@@ -17,4 +17,5 @@ public enum SexEnum {
     public void setValue(String value) {
         this.value = value;
     }
+
 }
